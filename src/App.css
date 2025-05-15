@@ -1,0 +1,80 @@
+/* src/App.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #FFF8F0; 
+  color: #4E342E; 
+  min-height: 100vh;
+}
+
+.navbar-custom {
+  background-color: #E53935; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand, .nav-link {
+  color: white !important;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #FFEB3B !important; 
+}
+
+.btn-custom {
+  background-color: #E53935;
+  color: white;
+  font-weight: bold;
+  border: none;
+  transition: all 0.3s ease;
+  padding: 10px 20px;
+  border-radius: 30px;
+}
+
+.btn-custom:hover {
+  background-color: #C62828;
+  transform: scale(1.05);
+}
+
+.card {
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: white;
+  color: #4E342E;
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  color: #4E342E;
+}
+
+.footer {
+  background-color: #4E342E;
+  text-align: center;
+  padding: 1rem;
+  color: white;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-input {
+  border-radius: 30px;
+  padding: 10px 20px;
+  border: 2px solid #E53935;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #4E342E;
+}
+
+.search-input::placeholder {
+  color: rgba(78, 52, 46, 0.6);
+}
