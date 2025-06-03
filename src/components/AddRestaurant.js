@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { db } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
-export default function AddRestaurant({ onAdd }) {
+export default function AddRestaurant() {
   const [restaurant, setRestaurant] = useState({
     name: '',
     description: '',
@@ -17,10 +19,17 @@ export default function AddRestaurant({ onAdd }) {
   const handleChange = e =>
     setRestaurant({ ...restaurant, [e.target.name]: e.target.value });
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    onAdd(restaurant); 
-    navigate('/'); 
+
+    try {
+      await addDoc(collection(db, 'restaurants'), restaurant);
+      alert('✅ Restaurante creado exitosamente.');
+      navigate('/');
+    } catch (error) {
+      console.error('❌ Error al guardar en Firestore:', error);
+      alert('Error al guardar el restaurante. Intenta de nuevo.');
+    }
   };
 
   return (

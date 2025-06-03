@@ -1,11 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 
-export default function Search({ restaurants }) {
+export default function Search() {
   const [query, setQuery] = useState('');
+  const [restaurants, setRestaurants] = useState([]);
+  const [filtered, setFiltered] = useState([]);
 
-  const filtered = restaurants.filter(r =>
-    r.name.toLowerCase().includes(query.toLowerCase())
-  );
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'restaurants'));
+        const data = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setRestaurants(data);
+        setFiltered(data);
+      } catch (error) {
+        console.error('Error al cargar restaurantes:', error);
+      }
+    };
+
+    fetchRestaurants();
+  }, []);
+
+  useEffect(() => {
+    const lowerQuery = query.toLowerCase();
+    const result = restaurants.filter(r =>
+      r.name.toLowerCase().includes(lowerQuery)
+    );
+    setFiltered(result);
+  }, [query, restaurants]);
 
   return (
     <div className="container mt-4">
@@ -44,7 +70,9 @@ export default function Search({ restaurants }) {
             </div>
           </div>
         ))}
-        {filtered.length === 0 && <p className="text-danger">No se encontraron resultados.</p>}
+        {filtered.length === 0 && (
+          <p className="text-danger">No se encontraron resultados.</p>
+        )}
       </div>
     </div>
   );

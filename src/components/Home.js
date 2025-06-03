@@ -1,4 +1,27 @@
-export default function Home({ restaurants }) {
+import { useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
+
+export default function Home() {
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'restaurants'));
+        const data = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setRestaurants(data);
+      } catch (error) {
+        console.error('Error al cargar los restaurantes:', error);
+      }
+    };
+
+    fetchRestaurants();
+  }, []);
+
   return (
     <div className="container mt-4">
       <h2 className="mb-4">🍽️ Restaurantes Disponibles</h2>
