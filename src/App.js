@@ -1,13 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './components/Home';
 import Search from './components/Search';
 import AddRestaurant from './components/AddRestaurant';
 import './App.css';
-import initialRestaurants from './data/restaurants'; 
+import { db } from './firebase'; 
+import { collection, getDocs } from 'firebase/firestore';
 
 function App() {
-  const [restaurants, setRestaurants] = useState(initialRestaurants);
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'restaurants'));
+        const firebaseRestaurants = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setRestaurants(firebaseRestaurants);
+      } catch (error) {
+        console.error("Error fetching restaurants:", error);
+      }
+    };
+
+    fetchRestaurants();
+  }, []);
 
   const handleAddRestaurant = (newRestaurant) => {
     setRestaurants(prev => [...prev, newRestaurant]);
